@@ -1,0 +1,262 @@
+=================================================================================================================
+JMP: Jump unconditionally
+
+// ip = 24;
+program.push_back((byte)Opcode::JMP);	// jump unconditionally to IP destination
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x18);			// 0x------18	=24
+=================================================================================================================
+
+=================================================================================================================
+CALL: Call a function
+	// This will store current stack frame. And then create a new stack frame for the new called function.
+	// Stack frame pointer will point to IP to return when finished. E.g: Setting ip=sp
+
+// f(...)
+program.push_back((byte)Opcode::CALL);	// call a function
+program.push_back((byte)0x02);			// number of parameters. Note 0 means no parameters
+program.push_back((byte)0x00);			// 'int' A parameter retrived from slot #000
+program.push_back((byte)0x01);			// 'int' B parameter retrived from slot #001
+	... number of parameters
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x18);			// 0x------18	=24 // jump to function IP
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x18);			// 0x------18	=24 // when finished with function return to callers IP
+=================================================================================================================
+
+=================================================================================================================
+RET: Return from function
+
+// return ans;  //---->ip = sp;
+program.push_back((byte)Opcode::RET);	// return from function
+=================================================================================================================
+
+=================================================================================================================
+INC: Increment value
+
+// b++;
+program.push_back((byte)Opcode::INC);	// increment b: b++
+program.push_back((byte)0x01);			// at slot #001
+=================================================================================================================
+
+=================================================================================================================
+DEC: Decrement value
+
+// b--;
+program.push_back((byte)Opcode::DEC);	// decrement b: b--
+program.push_back((byte)0x01);			// at slot #001
+=================================================================================================================
+
+=================================================================================================================
+IADD: Integer addition
+
+// int x = a + b;
+program.push_back((byte)Opcode::IADD);	// int add: #000=A+B
+program.push_back((byte)0x00);			// store it in slot #000 (after the addition)
+program.push_back((byte)0x00);			// read value from slot #000
+program.push_back((byte)0x01);			// read value from slot #001
+=================================================================================================================
+
+=================================================================================================================
+ISUB: Integer subtraction
+
+// int x = a - b;
+program.push_back((byte)Opcode::ISUB);	// int sub: #000=A-B
+program.push_back((byte)0x00);			// store it in slot #000 (after the subtraction)
+program.push_back((byte)0x00);			// read value from slot #000
+program.push_back((byte)0x01);			// read value from slot #001
+=================================================================================================================
+
+=================================================================================================================
+IMUL: Integer multiplication
+
+// int x = a * b;
+program.push_back((byte)Opcode::IMUL);	// int mul: #000=A*B
+program.push_back((byte)0x00);			// store it in slot #000 (after the multiplication)
+program.push_back((byte)0x00);			// read value from slot #000
+program.push_back((byte)0x01);			// read value from slot #001
+=================================================================================================================
+
+=================================================================================================================
+IDIV: Integer divition
+
+// int x = a / b;
+program.push_back((byte)Opcode::IDIV);	// int div: #000=A/B
+program.push_back((byte)0x00);			// store it in slot #000 (after the divition)
+program.push_back((byte)0x00);			// read value from slot #000
+program.push_back((byte)0x01);			// read value from slot #001
+=================================================================================================================
+
+=================================================================================================================
+IVAR: Integer variable (creation int variable)
+	This will overwrite what ever previous int variable. This can also be used to change value by program instruction.
+
+// int a = 2;
+program.push_back((byte)Opcode::IVAR);	// create int
+program.push_back((byte)0x00);			// at slot #000
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x02);			// 0x------02	=2
+=================================================================================================================
+
+=================================================================================================================
+ICPY: Integer copy from another slot.
+	This will overwrite what ever previous int variable. This sets an int varible value by copy from another int slot.
+
+// int b = a;
+program.push_back((byte)Opcode::ICPY);	// copy int value from another slot.
+program.push_back((byte)0x01);			// to slot #001
+program.push_back((byte)0x00);			// from slot #000
+=================================================================================================================
+
+=================================================================================================================
+IJMPT: Jump if true. 'int' or 'bool'
+
+// ip = 24;
+program.push_back((byte)Opcode::JMPT);	// jump if true to IP destination
+program.push_back((byte)0x00);			// check in slot #000
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x19);			// 0x------19	=25
+=================================================================================================================
+
+=================================================================================================================
+IJMPTF: Jump if false. 'int' or 'bool'
+
+// ip = 24;
+program.push_back((byte)Opcode::JMPF);	// jump if false to IP destination
+program.push_back((byte)0x00);			// check in slot #000
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x19);			// 0x------19	=25
+=================================================================================================================
+
+=================================================================================================================
+IJMPGT: Jump if (A >= B). 'int'
+
+// if(a >= b) ip = 26;
+program.push_back((byte)Opcode::IJMPGT);// jump if A>=B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+IJMPG: Jump if (A > B). 'int'
+
+// if(a > b) ip = 26;
+program.push_back((byte)Opcode::IJMPG);// jump if A>B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+IJMPLT: Jump if (A <= B). 'int'
+
+// if(a <= b) ip = 26;
+program.push_back((byte)Opcode::IJMPLT);// jump if A<=B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+IJMPL: Jump if (A < B). 'int'
+
+// if(a < b) ip = 26;
+program.push_back((byte)Opcode::IJMPL);// jump if A<B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+IJEQU: Jump if (A == B). 'int'
+
+// if(a == b) ip = 26;
+program.push_back((byte)Opcode::IJEQU);// jump if A==B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+IJEQUN: Jump if (A != B). 'int'
+
+// if(a != b) ip = 26;
+program.push_back((byte)Opcode::IJEQUN);// jump if A!=B to IP destination
+program.push_back((byte)0x00);			// A: slot #000
+program.push_back((byte)0x01);			// B: slot #001
+program.push_back((byte)0x00);			// 0x00------
+program.push_back((byte)0x00);			// 0x--00----
+program.push_back((byte)0x00);			// 0x----00--
+program.push_back((byte)0x1A);			// 0x------1A	=26
+=================================================================================================================
+
+=================================================================================================================
+STRVAR: String variable
+
+// string s = "Hello"
+program.push_back((byte)Opcode::STRVAR);// create string
+program.push_back((byte)0x00);			// at slot #000
+program.push_back((byte)0x05);			// string length
+program.push_back((byte)'H');
+program.push_back((byte)'e');
+program.push_back((byte)'l');
+program.push_back((byte)'l');
+program.push_back((byte)'o');
+=================================================================================================================
+
+=================================================================================================================
+IPRINT: Integer print
+
+// print x
+program.push_back((byte)Opcode::IPRINT);// print int
+program.push_back((byte)0x00);			// from slot #000
+=================================================================================================================
+
+=================================================================================================================
+STRPRINT: String print
+
+// print s
+program.push_back((byte)Opcode::STRPRINT); // print string
+program.push_back((byte)0x00);			// from slot #000
+=================================================================================================================
+
+=================================================================================================================
+PRINTLN: Print new line
+
+// printf("\n");
+program.push_back((byte)Opcode::PRINTLN); // print new line
+=================================================================================================================
+
+=================================================================================================================
+HALT: Quit program execution
+
+run = false; // quit program
+=================================================================================================================

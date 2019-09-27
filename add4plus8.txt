@@ -1,0 +1,83 @@
+/*
+	// main();
+	program.push_back((byte)Opcode::CALL);	// call a function
+	program.push_back((byte)0x00);			// number of parameters. Note 0 means no parameters
+	program.push_back((byte)0x00);			// 0x00------ Function IP:
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x00);			// 0x----00--
+	program.push_back((byte)0x0C);			// 0x------0C	=12 // jump to function IP
+	program.push_back((byte)0x00);			// 0x00------ Return IP:
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x00);			// 0x----00--
+	program.push_back((byte)0x0A);			// 0x------0A	=10 // when finished with function return to callers IP
+
+	// halt
+	program.push_back((byte)Opcode::HALT);	// halt program
+
+	//
+	// int main() {...};
+	//
+
+	// int a = 0;
+	program.push_back((byte)Opcode::IVAR);	// create int
+	program.push_back((byte)0x00);			// at slot #000
+	program.push_back((byte)0x00);			// 0x00------
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x00);			// 0x----00--
+	program.push_back((byte)0x04);			// 0x------04	=4
+
+	// int b = 256;
+	program.push_back((byte)Opcode::IVAR);	// create int
+	program.push_back((byte)0x01);			// at slot #001
+	program.push_back((byte)0x00);			// 0x00------
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x01);			// 0x----01--
+	program.push_back((byte)0x00);			// 0x------00	=256
+
+	// a = add(int a, int b); //'int'
+	program.push_back((byte)Opcode::CALL);	// call a function
+	program.push_back((byte)0x02);			// number of parameters. Note 0 means no parameters
+	program.push_back((byte)0x00);			// 'int' A parameter retrived from slot #000
+	program.push_back((byte)0x01);			// 'int' B parameter retrived from slot #001
+	program.push_back((byte)0x00);			// 0x00------ Function IP:
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x00);			// 0x----00--
+	program.push_back((byte)0x28);			// 0x------28	=40 // jump to function IP
+	program.push_back((byte)0x00);			// 0x00------ Return IP:
+	program.push_back((byte)0x00);			// 0x--00----
+	program.push_back((byte)0x00);			// 0x----00--
+	program.push_back((byte)0x23);			// 0x------23	=35 // when finished with function return to callers IP
+
+	// print x
+	program.push_back((byte)Opcode::IPRINT);// print int
+	program.push_back((byte)0x00);			// from slot #000
+	
+	// printf("\n");
+	program.push_back((byte)Opcode::PRINTLN); // print new line
+
+	// return ans;  //---->ip = sp;
+	program.push_back((byte)Opcode::RET);	// return from function
+
+	//
+	// end of function: main()
+	//
+
+	
+	//
+	// int add(int a, int b) {...};
+	//
+	
+	// int x = a + b;
+	program.push_back((byte)Opcode::IADD);	// int add: #000=A+B
+	program.push_back((byte)0x00);			// store it in slot #000 (after the addition)
+	program.push_back((byte)0x00);			// read value from slot #000
+	program.push_back((byte)0x01);			// read value from slot #001
+	
+	// return ans;  //---->ip = sp;
+	program.push_back((byte)Opcode::RET);	// return from function
+	
+	//
+	// end of function: add()
+	//
+
+*/
